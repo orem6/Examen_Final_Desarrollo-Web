@@ -10,7 +10,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
-        value: 22.16.0
+        value: "22"
       - key: FRONTEND_URL
         sync: false
       - key: FIREBASE_PROJECT_ID

@@ -1,5 +1,9 @@
 # Municipio · Atención ciudadana
 
+Repositorio: https://github.com/orem6/Examen_Final_Desarrollo-Web
+
+Backend Render: https://atencion-ciudadana-api-orem6.onrender.com — comprobar `/healthz` para estado. El servicio puede estar iniciándose; Firebase sigue pendiente de configuración.
+
 Proyecto académico correspondiente exclusivamente a las **Series I y II**. No incluye los servicios de IA de la Serie III.
 
 ## Inicio rápido en Windows
@@ -75,7 +79,7 @@ Crear un **Web Service** Node conectado al repositorio de este proyecto:
 - Start command: `npm run start:backend`
 - Health check: `/healthz`
 - Plan: Free.
-- Variables: `NODE_ENV=production`, `NODE_VERSION=22.16.0`, `FIREBASE_PROJECT_ID`, `FIREBASE_API_KEY` y `FRONTEND_URL` con el origen HTTPS exacto de Netlify, sin barra final.
+- Variables: `NODE_ENV=production`, `NODE_VERSION=22`, `FIREBASE_PROJECT_ID`, `FIREBASE_API_KEY` y `FRONTEND_URL` con el origen HTTPS exacto de Netlify, sin barra final.
 - `RENDER_EXTERNAL_URL` lo proporciona Render; se utiliza para formar la URL HTTPS canónica y emitir cookies Secure. Si el proveedor no lo entrega, establecer `PUBLIC_BACKEND_URL` con la URL HTTPS del backend.
 
 `render.yaml` contiene la configuración equivalente. No reemplazar servicios de otros proyectos.
