@@ -1,6 +1,14 @@
 {
+  "auth": {
+    "providers": {
+      "anonymous": true,
+      "emailPassword": true
+    }
+  },
   "emulators": { "auth": { "host": "127.0.0.1", "port": 9099 }, "firestore": { "host": "127.0.0.1", "port": 8086 }, "ui": { "enabled": false }, "singleProjectMode": true },
   "firestore": {
+    "database": "(default)",
+    "location": "us-east4",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   }
