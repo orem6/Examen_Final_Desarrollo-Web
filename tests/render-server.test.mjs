@@ -134,7 +134,17 @@ test('Se rechaza el payload HTTP mayor de 500000 bytes', async () => {
   assert.match((await response.json()).error, /grande/);
 });
 
-test('Rutas ajenas a la API y rutas API desconocidas devuelven 404', async () => {
+test('Inicio accesible sin convertir rutas desconocidas en respuestas exitosas', async () => {
+  const home = await fetch(unconfigured + '/');
+  assert.equal(home.status, 200);
+  assert.match(home.headers.get('content-type'), /text\/html/);
+  const html = await home.text();
+  assert.match(html, /href="https:\/\/municipio-test\.netlify\.app\/"/);
+  assert.match(html, /href="\/healthz"/);
+  const head = await fetch(unconfigured + '/', { method: 'HEAD' });
+  assert.equal(head.status, 200);
+  assert.equal(await head.text(), '');
+  assert.equal((await fetch(unconfigured + '/', { method: 'POST' })).status, 404);
   assert.equal((await fetch(unconfigured + '/admin')).status, 404);
   assert.equal((await fetch(configured + '/api/no-existe')).status, 404);
 });

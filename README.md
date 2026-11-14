@@ -19,7 +19,7 @@ Proyecto académico correspondiente exclusivamente a las **Series I y II**. La S
 **Estado actual:** frontend en Netlify, backend en Render y Firebase conectados. El 14 de noviembre de 2026 se aprobaron **12 comprobaciones contra la API publicada**, incluido el registro de un reporte con fotografía, su recuperación desde Firestore y el acceso municipal. El proyecto `atencion-ciudadana-orem6` utiliza el plan Spark, sin facturación habilitada; la autenticación, las reglas y los índices están desplegados. La configuración local también está lista en la computadora original.
 <!-- FIREBASE_STATUS_END -->
 
-La raíz del backend contiene únicamente la API; para comprobar disponibilidad se debe abrir `/healthz`. Las pantallas se encuentran en Netlify.
+La raíz del backend muestra una página de bienvenida con enlaces al portal ciudadano y al estado del servicio (`/healthz`). La aplicación y el panel municipal se encuentran en Netlify; las rutas de datos del backend permanecen bajo `/api`.
 
 ## ✨ Funcionalidades
 
