@@ -9,7 +9,7 @@ Proyecto académico correspondiente exclusivamente a las **Series I y II**. No i
 3. Ejecuta `INICIAR.cmd` o, desde una terminal en esta carpeta, `npm run dev`.
 4. Abre <http://127.0.0.1:5173> para el portal o <http://127.0.0.1:5173/admin> para administración.
 
-Se requiere Node.js 22.13 o superior. Las dependencias ya están instaladas en esta computadora. En otra computadora ejecuta `npm ci` antes de iniciar. Para comprobar tipos ejecuta `npx tsc --noEmit`; para compilar, `npm run build`.
+Se requiere Node.js 22.13 o superior. Las dependencias ya están instaladas en esta computadora. En otra computadora ejecuta `npm ci` antes de iniciar. Para comprobar tipos ejecuta `npm run check`. `npm run dev` inicia el frontend Vite en el puerto 5173 y el backend Node en el puerto 3001. Consulta la sección de despliegue para compilar cada parte.
 
 **Estado de conexión:** el proyecto no contiene credenciales ni una base de datos de producción preconfigurada. Mientras falten `FIREBASE_PROJECT_ID` y `FIREBASE_API_KEY`, se muestra un aviso y el envío permanece deshabilitado. La aplicación no utiliza reportes inventados ni localStorage como reemplazo de Firebase.
 
@@ -61,7 +61,54 @@ Ciudadano + fotografía
 | `firestore.indexes.json` | Exclusión de datos grandes de los índices |
 | `tests/firebase.integration.mjs` | Pruebas reales contra emuladores oficiales |
 
-Frontend React/TypeScript y servidor Vinext compatible con rutas App Router. La API se ejecuta localmente con Vite/Workers y puede desplegarse como Cloudflare Worker. El navegador llama a la API propia usando `fetch`; la API llama a Firebase usando `fetch`. No se necesita desplegar Cloud Functions ni habilitar facturación.
+Frontend React/TypeScript compilado con Vite para Netlify y backend Node.js para Render. Netlify reenvía `/api/*` a Render mediante un proxy para conservar las cookies seguras de mismo origen. El navegador llama a la API propia usando `fetch`; la API llama a Firebase usando `fetch`. No se necesita desplegar Cloud Functions ni habilitar facturación. Se conserva también la configuración anterior de Sites/Vinext, independiente del despliegue solicitado en Render y Netlify.
+
+## Publicación en Render y Netlify
+
+Los archivos de configuración están preparados; su presencia no significa que los servicios ya estén publicados. Se requieren sesiones autorizadas en ambas plataformas y el repositorio GitHub exclusivo indicado por el propietario.
+
+### Backend en Render
+
+Crear un **Web Service** Node conectado al repositorio de este proyecto:
+
+- Build command: `npm ci --include=dev && npm run build:backend`
+- Start command: `npm run start:backend`
+- Health check: `/healthz`
+- Plan: Free.
+- Variables: `NODE_ENV=production`, `NODE_VERSION=22.16.0`, `FIREBASE_PROJECT_ID`, `FIREBASE_API_KEY` y `FRONTEND_URL` con el origen HTTPS exacto de Netlify, sin barra final.
+- `RENDER_EXTERNAL_URL` lo proporciona Render; se utiliza para formar la URL HTTPS canónica y emitir cookies Secure. Si el proveedor no lo entrega, establecer `PUBLIC_BACKEND_URL` con la URL HTTPS del backend.
+
+`render.yaml` contiene la configuración equivalente. No reemplazar servicios de otros proyectos.
+
+### Frontend en Netlify
+
+Crear un proyecto estático conectado al mismo repositorio:
+
+- Build command: `npm run build:frontend`
+- Publish directory: `dist/frontend`
+- Variable de compilación: `BACKEND_URL=https://URL-REAL-DEL-SERVICIO.onrender.com`.
+- `netlify.toml` ya contiene los ajustes de compilación. No se necesitan funciones de Next.js para este frontend estático.
+
+El build exige una URL HTTPS válida y genera `_redirects` con el proxy API antes del fallback SPA. Cambiar `BACKEND_URL` requiere recompilar/publicar el frontend; cambiar `FRONTEND_URL` requiere reiniciar/publicar Render. El backend solo acepta el origen exacto configurado. No se utiliza CORS abierto ni cookies de terceros.
+
+### Comprobación posterior al despliegue
+
+1. Visitar `https://URL-RENDER/healthz` y `https://URL-NETLIFY/api/health`; ambos deben responder JSON.
+2. `configured: true` indica que existen las variables Firebase. Todavía debe demostrarse una escritura real para confirmar configuración, permisos y reglas.
+3. Enviar un reporte desde Netlify, revisar la constancia y abrirlo desde el panel municipal.
+4. Confirmar descripción, fotografía y estado persistidos tras recargar.
+
+Render Free puede tardar en iniciar después de inactividad y el proxy de Netlify tiene un límite de 26 segundos. La interfaz informa del error y reintenta únicamente la consulta inicial de estado, nunca un envío de reporte automáticamente.
+
+Para compilar manualmente en PowerShell:
+
+```powershell
+npm run build:backend
+$env:BACKEND_URL = 'https://URL-REAL-DEL-SERVICIO.onrender.com'
+npm run build:frontend
+```
+
+Referencias: [Render Node](https://render.com/docs/deploy-node-express-app), [proxy Netlify](https://docs.netlify.com/manage/routing/redirects/rewrites-proxies/).
 
 ## Modelo de datos
 

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: atencion-ciudadana-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build:backend
+    startCommand: npm run start:backend
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: FRONTEND_URL
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_API_KEY
+        sync: false

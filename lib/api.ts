@@ -5,7 +5,7 @@ import {
   decodeFields,
   statuses,
 } from "./reports";
-type Config = { FIREBASE_PROJECT_ID?: string; FIREBASE_API_KEY?: string };
+type Config = { FIREBASE_PROJECT_ID?: string; FIREBASE_API_KEY?: string; FRONTEND_URL?: string };
 type Auth = { idToken: string; localId: string; email?: string };
 const security = {
   "Cache-Control": "no-store",
@@ -27,7 +27,8 @@ export async function handleApi(
     if (
       method !== "GET" &&
       request.headers.get("origin") &&
-      request.headers.get("origin") !== url.origin
+      request.headers.get("origin") !== url.origin &&
+      !(config.FRONTEND_URL || '').split(',').map(value => value.trim()).filter(Boolean).includes(request.headers.get("origin")!)
     )
       throw new ApiError(403, "Origen de la solicitud no permitido.");
     if (path === "health" && method === "GET")
