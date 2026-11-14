@@ -2,7 +2,11 @@
 
 Repositorio: https://github.com/orem6/Examen_Final_Desarrollo-Web
 
-Backend Render: https://atencion-ciudadana-api-orem6.onrender.com — comprobar `/healthz` para estado. El servicio puede estar iniciándose; Firebase sigue pendiente de configuración.
+Frontend Netlify: https://atencion-ciudadana-orem6.netlify.app
+
+Panel municipal: https://atencion-ciudadana-orem6.netlify.app/admin
+
+Backend Render: https://atencion-ciudadana-api-orem6.onrender.com — comprobar `/healthz` para estado. Publicado y comprobado el 14 de noviembre de 2026; Firebase sigue pendiente de configuración.
 
 Proyecto académico correspondiente exclusivamente a las **Series I y II**. No incluye los servicios de IA de la Serie III.
 
@@ -69,7 +73,9 @@ Frontend React/TypeScript compilado con Vite para Netlify y backend Node.js para
 
 ## Publicación en Render y Netlify
 
-Los archivos de configuración están preparados; su presencia no significa que los servicios ya estén publicados. Se requieren sesiones autorizadas en ambas plataformas y el repositorio GitHub exclusivo indicado por el propietario.
+Frontend y backend publicados en las URLs indicadas al inicio. Se verificaron las rutas del portal, administración y `/api/health` a través del proxy Netlify; todas responden HTTP 200. Render permite el origen exacto del frontend y rechaza orígenes ajenos con HTTP 403. El registro y el acceso a datos permanecen pendientes de Firebase.
+
+Netlify se publicó desde el build local en el equipo `keyorellana453`; `BACKEND_URL` está guardado en su contexto production. Para repetir la publicación, ejecutar `npm run build:frontend` con esa variable y `netlify deploy --dir dist/frontend --prod --no-build`. El backend se administra directamente en Render como `atencion-ciudadana-api-orem6`, conectado al repositorio de este proyecto.
 
 ### Backend en Render
 
@@ -82,7 +88,7 @@ Crear un **Web Service** Node conectado al repositorio de este proyecto:
 - Variables: `NODE_ENV=production`, `NODE_VERSION=22`, `FIREBASE_PROJECT_ID`, `FIREBASE_API_KEY` y `FRONTEND_URL` con el origen HTTPS exacto de Netlify, sin barra final.
 - `RENDER_EXTERNAL_URL` lo proporciona Render; se utiliza para formar la URL HTTPS canónica y emitir cookies Secure. Si el proveedor no lo entrega, establecer `PUBLIC_BACKEND_URL` con la URL HTTPS del backend.
 
-`render.yaml` contiene la configuración equivalente. No reemplazar servicios de otros proyectos.
+`render.yaml` es una plantilla alternativa para una instalación nueva; no administra el servicio existente, que fue creado directamente en Render. Las variables del servicio actual se actualizan directamente en Render. No aplicar la plantilla para actualizarlo, pues podría crear un segundo servicio.
 
 ### Frontend en Netlify
 
